@@ -103,7 +103,7 @@ RoboticArmView.createView = function (canvas, container, isNegative) {
             j1a = -j1a
         } else {
             j3a -= 100.5;
-            j3a = Math.abs(j3a) + 70.5;
+            j3a = -j3a + 70.5;
             j2a = Math.abs(j2a - baseJoint2.x) + 32.5;
         }
         container.innerHTML = `角度: ${(lastAngle0 / Math.PI * 180).toPrecision(3)}, ${(lastAngle1 / Math.PI * 180).toPrecision(3)}<br/>
