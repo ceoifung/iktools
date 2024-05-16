@@ -62,22 +62,31 @@ RoboticArmView.createView = function (canvas, container, isNegative) {
     let currentJoint = joint3;
 
     canvas.addEventListener('mousedown', (e) => {
-        // if (Math.hypot(e.offsetX - joint3.x, e.offsetY - joint3.y) < 5) {
-        //     isDragging = true;
-        // }
-        console.log("mouse down")
         isDragging = true
     });
     canvas.addEventListener('mousemove', (e) => {
         if (isDragging) {
-            // currentJoint.x = e.offsetX - center.x;
-            // currentJoint.y = e.offsetY - center.y;
             updateJoints(e.offsetX, e.offsetY);
         }
     });
     canvas.addEventListener('mouseup', () => {
         isDragging = false;
     });
+    canvas.addEventListener("touchstart", ()=>{
+        isDragging = true
+    })
+    canvas.addEventListener("touchmove", (e)=>{
+        if (isDragging) {
+            const { x, y, width, height } = e.target.getBoundingClientRect();
+            const offsetX = (e.touches[0].clientX - x) / width * e.target.offsetWidth;
+            const offsetY = (e.touches[0].clientY - y) / height * e.target.offsetHeight;
+            
+            updateJoints(offsetX, offsetY);
+        }
+    })
+    canvas.addEventListener("touchend", ()=>{
+        isDragging = false
+    })
     // function calcRadiusWithCenter() {
     //     return Math.sqrt(Math.pow(propsDataView1.target.x, 2) + Math.pow(propsDataView1.target.y, 2));
     // }
@@ -106,10 +115,10 @@ RoboticArmView.createView = function (canvas, container, isNegative) {
             j3a = -j3a + 70.5;
             j2a = Math.abs(j2a - baseJoint2.x) + 32.5;
         }
-        container.innerHTML = `角度: ${(lastAngle0 / Math.PI * 180).toPrecision(3)}, ${(lastAngle1 / Math.PI * 180).toPrecision(3)}<br/>
-        坐标系：<br/>[ ${j1a}.0,&nbsp;&nbsp;${joint1.y}.0,<br/>
-        &nbsp;${(j2a).toPrecision(3)}, ${(-joint2.y).toPrecision(3)},<br/>
-        &nbsp;${(j3a).toPrecision(3)}, ${(-joint3.y).toPrecision(3)} ]`;
+        container.innerHTML = `<span style='text-align:left'>角度</span>:<br/> [${(lastAngle0 / Math.PI * 180).toPrecision(3)}, ${(lastAngle1 / Math.PI * 180).toPrecision(3)}]<br/>
+        坐标系<br/>[ ${j1a}.0,&nbsp;&nbsp;${joint1.y}.0 ],<br/>
+        &nbsp;[ ${(j2a).toPrecision(3)}, ${(-joint2.y).toPrecision(3)} ],<br/>
+        &nbsp;[ ${(j3a).toPrecision(3)}, ${(-joint3.y).toPrecision(3)} ]`;
 
     }
 
